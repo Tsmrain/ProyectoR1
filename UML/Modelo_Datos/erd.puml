@@ -22,6 +22,7 @@ entity "Usuario" {
   email : String
   password_hash : String
   rol_id : FK
+  residencial_id : FK
 }
 
 entity "Rol" {
@@ -33,7 +34,7 @@ entity "Rol" {
 entity "Reserva" {
   * id : Long
   --
-  nombre_cliente : String
+  cliente_id : FK
   hora_inicio : LocalDateTime
   tiempo_limite_checkin : LocalDateTime
   estado : Enum
@@ -44,6 +45,7 @@ entity "Reserva" {
 Habitacion ||--o{ FotoHabitacion
 Habitacion ||--o{ Reserva
 Rol ||--o{ Usuario
+Usuario ||--o{ Reserva
 
 entity "Residencial" {
   * id : Long
@@ -56,4 +58,5 @@ entity "Residencial" {
 }
 
 Residencial ||--o{ Habitacion
+Residencial ||--o{ Usuario
 @enduml

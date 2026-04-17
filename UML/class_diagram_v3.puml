@@ -16,7 +16,7 @@ package "Domain Models" {
     }
     class Reserva {
         Long id
-        String nombreCliente
+        Usuario cliente
         LocalDateTime horaInicio
         LocalDateTime tiempoLimiteCheckIn
         EstadoReserva estado
@@ -26,6 +26,16 @@ package "Domain Models" {
         String email
         String passwordHash
         Rol rol
+        Residencial residencial
+    }
+    class Residencial {
+        Long id
+        String nombre
+        String direccion
+        Double latitud
+        Double longitud
+        Integer tiempoXPredeterminado
+        List<Habitacion> habitaciones
     }
     class Rol {
         Long id
@@ -35,7 +45,7 @@ package "Domain Models" {
 
 package "Services" {
     class ReservaService {
-        + crearReserva()
+        + crearReserva(habitacionId, emailCliente, horaInicio)
         + registrarCheckIn()
         + registrarCheckOut()
         + procesarNoShows()
@@ -52,7 +62,11 @@ package "Services" {
 
 Habitacion "1" *-- "0..*" FotoHabitacion
 Usuario "0..*" o-- "1" Rol
+Usuario "0..*" --o "1" Residencial : trabaja en
 Reserva "0..*" --o "1" Habitacion
+Reserva "0..*" --o "1" Usuario : realizada por
+Habitacion "0..*" --o "1" Residencial
 ReservaService ..> Habitacion
 ReservaService ..> Reserva
+ReservaService ..> Usuario : busca por email
 @enduml
