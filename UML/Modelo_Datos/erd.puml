@@ -44,4 +44,16 @@ entity "Reserva" {
 Habitacion ||--o{ FotoHabitacion
 Habitacion ||--o{ Reserva
 Rol ||--o{ Usuario
+
+entity "Residencial" {
+  * id : Long
+  --
+  nombre : String
+  direccion : String
+  latitud : Double
+  longitud : Double
+  tiempo_x_predeterminado : Integer
+}
+
+Residencial ||--o{ Habitacion
 @enduml

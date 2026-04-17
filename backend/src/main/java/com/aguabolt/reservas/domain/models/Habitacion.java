@@ -33,6 +33,10 @@ public class Habitacion {
     @Column(nullable = false)
     private Integer tiempoXLimpieza; // Minutos definidos por residencial
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "residencial_id")
+    private Residencial residencial;
+
     @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<FotoHabitacion> fotos = new ArrayList<>();
