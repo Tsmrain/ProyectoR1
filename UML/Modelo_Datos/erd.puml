@@ -1,0 +1,47 @@
+@startuml
+entity "Habitacion" {
+  * id : Long
+  --
+  numero : String
+  tarifa : Double
+  estado : Enum
+  tiempo_x_limpieza : Integer
+}
+
+entity "FotoHabitacion" {
+  * id : Long
+  --
+  ruta_local : String
+  es_principal : Boolean
+  habitacion_id : FK
+}
+
+entity "Usuario" {
+  * id : Long
+  --
+  email : String
+  password_hash : String
+  rol_id : FK
+}
+
+entity "Rol" {
+  * id : Long
+  --
+  nombre : String (CLIENTE, RECEPCIONISTA, ADMIN)
+}
+
+entity "Reserva" {
+  * id : Long
+  --
+  nombre_cliente : String
+  hora_inicio : LocalDateTime
+  tiempo_limite_checkin : LocalDateTime
+  estado : Enum
+  habitacion_id : FK
+  created_at : Timestamp
+}
+
+Habitacion ||--o{ FotoHabitacion
+Habitacion ||--o{ Reserva
+Rol ||--o{ Usuario
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+participant "React Client" as Client
+participant "AuthController" as Controller
+participant "AuthService" as Service
+participant "UserRepository" as Repo
+participant "BCryptEncoder" as Crypto
+participant "JwtTokenProvider" as JWT
+
+Client -> Controller : login(email, password)
+activate Controller
+Controller -> Service : authenticate(email, password)
+activate Service
+Service -> Repo : findByEmail(email)
+Repo --> Service : User (password_hash)
+Service -> Crypto : matches(password, password_hash)
+activate Crypto
+Crypto --> Service : true/false
+deactivate Crypto
+Service -> JWT : generateToken(user)
+activate JWT
+JWT --> Service : tokenString
+deactivate JWT
+Service --> Controller : AuthResponse(token)
+deactivate Service
+Controller --> Client : 200 OK (JWT Token)
+deactivate Controller
+@enduml

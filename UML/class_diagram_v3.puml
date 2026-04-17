@@ -1,0 +1,58 @@
+@startuml
+package "Domain Models" {
+    class Habitacion {
+        Long id
+        String numero
+        Double tarifa
+        EstadoHabitacion estado
+        Integer tiempoXLimpieza
+        List<FotoHabitacion> fotos
+    }
+    class FotoHabitacion {
+        Long id
+        String rutaLocal
+        Boolean esPrincipal
+        Habitacion habitacion
+    }
+    class Reserva {
+        Long id
+        String nombreCliente
+        LocalDateTime horaInicio
+        LocalDateTime tiempoLimiteCheckIn
+        EstadoReserva estado
+    }
+    class Usuario {
+        Long id
+        String email
+        String passwordHash
+        Rol rol
+    }
+    class Rol {
+        Long id
+        String nombre
+    }
+}
+
+package "Services" {
+    class ReservaService {
+        + crearReserva()
+        + registrarCheckIn()
+        + registrarCheckOut()
+        + procesarNoShows()
+    }
+    class FileStorageService {
+        + storeFile(MultipartFile): String
+        + loadFileAsResource(String): Resource
+    }
+    class JwtTokenProvider {
+        + generateToken(Authentication): String
+        + validateToken(String): Boolean
+    }
+}
+
+Habitacion "1" *-- "0..*" FotoHabitacion
+Usuario "0..*" o-- "1" Rol
+Reserva "0..*" --o "1" Habitacion
+ReservaService ..> Habitacion
+ReservaService ..> Reserva
+@enduml

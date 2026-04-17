@@ -1,0 +1,20 @@
+@startuml
+actor "Recepcionista/Admin" as User
+participant "HabitacionController" as Controller
+participant "FileStorageService" as Storage
+participant "FotoHabitacionRepository" as Repo
+
+User -> Controller : uploadImage(habitacionId, MultipartFile)
+activate Controller
+Controller -> Storage : storeFile(MultipartFile)
+activate Storage
+Note over Storage: Genera UUID unico y guarda\nen directorio local /uploads
+Storage --> Controller : ruta_local (String)
+deactivate Storage
+Controller -> Repo : save(FotoHabitacion)
+activate Repo
+Repo --> Controller : FotoHabitacionEntity
+deactivate Repo
+Controller --> User : 201 Created (OK)
+deactivate Controller
+@enduml
