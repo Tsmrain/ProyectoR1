@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import org.springframework.security.test.context.support.WithMockUser;
+
 @WebMvcTest(ReservaController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class ReservaControllerTest {
 
     @Autowired
@@ -27,7 +31,11 @@ class ReservaControllerTest {
     @MockitoBean
     private ReservaService reservaService;
 
+    @MockitoBean
+    private com.aguabolt.reservas.infrastructure.security.JwtTokenProvider jwtTokenProvider;
+
     @Test
+    @WithMockUser(roles = "ADMIN")
     void testCrearReservaEndpoint() throws Exception {
         Reserva mockReserva = Reserva.builder()
                 .id(1L)

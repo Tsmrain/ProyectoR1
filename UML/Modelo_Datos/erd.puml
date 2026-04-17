@@ -1,4 +1,4 @@
-@startuml
+@startuml erd_residencial
 entity "Habitacion" {
   * id : Long
   --

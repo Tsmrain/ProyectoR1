@@ -1,4 +1,4 @@
-@startuml
+@startuml class_diagram_residencial
 package "Domain Models" {
     class Habitacion {
         Long id

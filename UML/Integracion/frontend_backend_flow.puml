@@ -1,0 +1,28 @@
+@startuml frontend_backend_flow
+actor "Frontend (React)" as FE
+participant "AuthController" as Auth
+participant "HabitacionController" as Hab
+participant "JwtTokenProvider" as JWT
+database "PostgreSQL" as DB
+
+== Autenticación ==
+FE -> Auth: POST /api/auth/login (email, password)
+Auth -> DB: Buscar usuario por email
+DB -> Auth: Datos de usuario
+Auth -> JWT: generateToken(email, rol)
+JWT -> Auth: JWT Token
+Auth -> FE: 200 OK { token: "..." }
+
+== Obtención de Datos Protegidos ==
+FE -> Hab: GET /api/habitaciones/{id} (Header: Authorization: Bearer JWT)
+Hab -> Hab: JwtAuthenticationFilter valida token
+Hab -> DB: Buscar habitación y sus fotos
+DB -> Hab: Datos Habitacion + List<FotoHabitacion>
+Hab -> FE: 200 OK JSON { id: 1, numero: "101", fotos: [ { rutaLocal: "/api/archivos/img.jpg" } ] }
+
+== Operaciones Multimedia ==
+FE -> Hab: POST /api/habitaciones/{id}/fotos (FormData, JWT)
+Hab -> DB: Guardar metadata de foto
+DB -> Hab: Confirmación
+Hab -> FE: 201 Created JSON { ... }
+@enduml

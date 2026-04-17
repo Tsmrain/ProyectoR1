@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "habitaciones")
@@ -30,4 +32,8 @@ public class Habitacion {
 
     @Column(nullable = false)
     private Integer tiempoXLimpieza; // Minutos definidos por residencial
+
+    @OneToMany(mappedBy = "habitacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<FotoHabitacion> fotos = new ArrayList<>();
 }
