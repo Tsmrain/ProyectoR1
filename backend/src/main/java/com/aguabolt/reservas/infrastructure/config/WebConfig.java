@@ -18,4 +18,13 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/api/archivos/**")
                 .addResourceLocations("file:" + uploadPath + "/");
     }
+
+    @Override
+    public void addCorsMappings(org.springframework.web.servlet.config.annotation.CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOrigins("http://localhost:5173", "http://127.0.0.1:5173") // Puertos de Vite/React
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+    }
 }
