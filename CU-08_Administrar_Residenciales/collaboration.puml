@@ -1,0 +1,10 @@
+@startuml
+object "<u>:Administrador</u>" as a
+object "<u>:SistemaAdmin</u>" as sys
+object "<u>:Residencial</u>" as res
+object "<u>:BaseDeDatos</u>" as db
+
+a - sys : 1: guardarConfig() >
+sys - res : 2: validar() >
+sys - db : 3: persistir() >
+@enduml

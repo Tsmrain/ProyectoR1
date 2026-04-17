@@ -1,0 +1,18 @@
+@startuml
+actor Cliente
+participant "PortalWeb" as UI
+participant "ControladorBusqueda" as Ctrl
+participant "Sistema" as Sys
+
+Cliente -> UI : ingresarCriterios(ubicacion, tipo)
+UI -> Ctrl : buscar(criterios)
+Ctrl -> Sys : consultarDisponibilidadSync()
+Sys --> Ctrl : listaHabitaciones
+loop por cada habitacion
+    alt estado == LIMPIEZA
+        Ctrl -> Ctrl : calcularTiempoEstimado()
+    end
+end
+Ctrl --> UI : presentarOpciones(lista)
+UI --> Cliente : verResultados
+@enduml

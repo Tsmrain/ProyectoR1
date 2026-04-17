@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+actor "Cliente" as C
+rectangle "Sistema de Reservas" {
+  usecase "CU-02: Realizar Reserva o Pre-reserva" as CU02
+}
+C --> CU02
+@enduml

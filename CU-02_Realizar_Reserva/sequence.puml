@@ -1,0 +1,27 @@
+@startuml
+actor Cliente
+participant "Interfaz" as UI
+participant "ControladorReservas" as Ctrl
+participant "Habitacion" as Hab
+participant "Reserva" as Res
+participant "ColaDeEspera" as Cola
+
+Cliente -> UI : solicitarReserva(idHab)
+UI -> Ctrl : procesarReserva(idHab)
+Ctrl -> Hab : estaDisponible()
+Hab --> Ctrl : boolean
+
+alt disponible == true
+    Ctrl -> Res : crear(estado: CONFIRMADA)
+    Res -> Res : calcularLimite(horaInicio + 30min)
+else disponible == false
+    UI --> Cliente : ofrecerPreReserva()
+    Cliente -> UI : aceptarPreReserva()
+    UI -> Ctrl : encolarCliente()
+    Ctrl -> Res : crear(estado: EN_ESPERA)
+    Ctrl -> Cola : encolar(Res)
+end
+
+Ctrl --> UI : entregarIdReserva(id)
+UI --> Cliente : mostrarConfirmacion
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+object "<u>:Recepcionista</u>" as r
+object "<u>:Reserva</u>" as res
+object "<u>:Habitacion</u>" as hab
+object "<u>:Cronometro</u>" as crono
+
+r - res : 1: finalizar() >
+res - hab : 2: pasarALimpieza() >
+hab - crono : 3: iniciarTiempoX() >
+@enduml

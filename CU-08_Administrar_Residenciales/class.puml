@@ -1,0 +1,18 @@
+@startuml
+package "Modelo de Dominio - Administración" {
+  class Administrador {
+    - keyAdmin: String
+  }
+  class Residencial {
+    - nombre: String
+    - tiempoX_Minutos: int
+    - ubicacion: String
+    + actualizarConfiguracion(datos: Map)
+  }
+  class Database {
+    + persistir(obj: Object)
+  }
+  Administrador -- Residencial : configura
+  Residencial ..> Database : se guarda en
+}
+@enduml

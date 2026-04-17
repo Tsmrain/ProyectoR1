@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+actor "Administrador (Admin)" as A
+rectangle "Sistema de Reservas" {
+  usecase "CU-08: Administrar Datos de Residenciales" as CU08
+}
+A --> CU08
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+actor Cliente
+participant "Interfaz" as UI
+participant "Controlador" as Ctrl
+participant "Reserva" as Res
+participant "Habitacion" as Hab
+participant "Cola" as Cola
+
+Cliente -> UI : ingresarID(id)
+UI -> Ctrl : consultar(id)
+Ctrl -> Res : obtenerDetalles()
+Res --> Ctrl : datos
+Ctrl --> UI : mostrarDetalles(datos)
+
+Cliente -> UI : cancelar()
+UI -> Ctrl : anularReserva(id)
+Ctrl -> Res : setEstado(CANCELADA)
+
+Ctrl -> Hab : reasignar()
+Hab -> Cola : obtenerSiguiente()
+alt hay cliente en cola
+    Cola --> Hab : rNext
+    Hab -> rNext : setEstado(CONFIRMADA)
+end
+
+Ctrl --> UI : confirmarAnulacion()
+UI --> Cliente : operacionExitosa
+@enduml

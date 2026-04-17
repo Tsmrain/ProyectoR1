@@ -1,0 +1,23 @@
+@startuml
+package "Modelo de Dominio - Gestión" {
+  class Reserva {
+    - id: String
+    - estado: EstadoReserva
+    + cancelar()
+  }
+  enum EstadoReserva {
+    CONFIRMADA
+    EN_ESPERA
+    CANCELADA
+  }
+  class Habitacion {
+    - id: String
+    + reasignarDesdeCola()
+  }
+  class ColaDeEspera {
+    + obtenerSiguiente(): Reserva
+  }
+  Reserva "many" -- "1" Habitacion
+  Habitacion "1" -- "1" ColaDeEspera
+}
+@enduml

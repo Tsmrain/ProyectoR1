@@ -1,0 +1,10 @@
+@startuml
+package "Modelo de Dominio - Ajustes" {
+  class Habitacion {
+    - id: String
+    - estado: String
+    + forzarEstado(nuevoEstado: String)
+    + detenerTemporizadores()
+  }
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+object "<u>:SistemaAutomático</u>" as sys
+object "<u>:Reserva</u>" as res
+object "<u>:ColaDeEspera</u>" as cola
+
+sys - res : 1: cancelarNoShow() >
+sys - cola : 2: promoverSiguiente() >
+@enduml

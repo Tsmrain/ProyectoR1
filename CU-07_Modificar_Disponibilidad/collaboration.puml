@@ -1,0 +1,8 @@
+@startuml
+object "<u>:Recepcionista</u>" as r
+object "<u>:ControladorHabitaciones</u>" as ctrl
+object "<u>:Habitacion</u>" as hab
+
+r - ctrl : 1: solicitarCambioManual() >
+ctrl - hab : 2: forzarNuevoEstado() >
+@enduml

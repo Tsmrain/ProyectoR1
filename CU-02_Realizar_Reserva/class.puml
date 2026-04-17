@@ -1,0 +1,27 @@
+@startuml
+package "Modelo de Dominio - Reserva" {
+  class Cliente {
+    - id: String
+  }
+  class Reserva {
+    - id: String
+    - estado: EstadoReserva
+    - tiempoLimiteCheckIn: DateTime
+  }
+  enum EstadoReserva {
+    CONFIRMADA
+    EN_ESPERA
+  }
+  class Habitacion {
+    - id: String
+    - estadoActual: String
+  }
+  class ColaDeEspera {
+    - orden: String = "FIFO"
+    + encolar(r: Reserva)
+  }
+  Reserva "many" -- "1" Cliente
+  Reserva "many" -- "1" Habitacion
+  Habitacion "1" -- "1" ColaDeEspera
+}
+@enduml

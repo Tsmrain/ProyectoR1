@@ -1,0 +1,16 @@
+@startuml
+actor Recepcionista
+participant "PanelControl" as UI
+participant "ControladorHabitaciones" as Ctrl
+participant "Habitacion" as Hab
+
+Recepcionista -> UI : seleccionarHabitacion(id)
+UI -> Ctrl : obtenerEstadoActual(id)
+Ctrl --> UI : estado
+Recepcionista -> UI : elegirNuevoEstado("Fuera de Servicio")
+UI -> Ctrl : aplicarCambioManual(id, "Fuera de Servicio")
+Ctrl -> Hab : forzarEstado("Fuera de Servicio")
+Hab -> Hab : detenerTemporizadores()
+Ctrl --> UI : cambioConfirmado
+UI --> Recepcionista : vistaActualizada
+@enduml

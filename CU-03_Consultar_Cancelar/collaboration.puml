@@ -1,0 +1,10 @@
+@startuml
+object "<u>:Cliente</u>" as c
+object "<u>:Reserva</u>" as res
+object "<u>:Habitacion</u>" as hab
+object "<u>:Cola</u>" as cola
+
+c - res : 1: cancelar() >
+res - hab : 2: liberar() >
+hab - cola : 3: dispararReasignacion() >
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+actor Recepcionista
+participant "SistemaRecepcion" as Sys
+participant "Reserva" as Res
+participant "Habitacion" as Hab
+
+Recepcionista -> Sys : ingresarIdReserva(id)
+Sys -> Res : obtenerEstado()
+Res --> Sys : "Confirmada"
+Sys -> Res : verificarTiempoGracia()
+alt tiempoValido == true
+    Recepcionista -> Sys : confirmarLlegada()
+    Sys -> Res : setEstado("Ocupada")
+    Sys -> Hab : setEstado("Ocupada")
+    Sys --> Recepcionista : checkInExitoso
+else tiempoValido == false (No-Show)
+    Sys --> Recepcionista : alertaNoShow()
+end
+@enduml

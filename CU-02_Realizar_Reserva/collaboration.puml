@@ -1,0 +1,10 @@
+@startuml
+object "<u>:Cliente</u>" as c
+object "<u>:ControladorReservas</u>" as ctrl
+object "<u>:Reserva</u>" as res
+object "<u>:ColaDeEspera</u>" as cola
+
+c - ctrl : 1: solicitar() >
+ctrl - res : 2: crear() >
+ctrl - cola : 3: encolar(FIFO) >
+@enduml

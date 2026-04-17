@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+actor "Recepcionista" as R
+rectangle "Sistema de Reservas" {
+  usecase "CU-04: Gestionar Check-in" as CU04
+}
+R --> CU04
+@enduml

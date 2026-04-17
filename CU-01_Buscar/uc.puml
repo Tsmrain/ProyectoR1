@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+actor "Cliente" as C
+rectangle "Sistema de Reservas" {
+  usecase "CU-01: Buscar Ubicación, Tarifas y Disponibilidad" as CU01
+}
+C --> CU01
+@enduml

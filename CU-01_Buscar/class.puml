@@ -1,0 +1,21 @@
+@startuml
+package "Modelo de Dominio - Buscar" {
+  class Residencial {
+    - nombre: String
+    - ubicacion: String
+    - tiempoX_Configurado: int
+  }
+  class Habitacion {
+    - id: String
+    - estado: EstadoHabitacion
+    - tarifaActual: double
+    + calcularTiempoEstimadoLiberacion(): int
+  }
+  enum EstadoHabitacion {
+    DISPONIBLE
+    OCUPADA
+    LIMPIEZA
+  }
+  Residencial "1" *-- "many" Habitacion
+}
+@enduml

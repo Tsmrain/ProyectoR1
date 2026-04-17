@@ -1,0 +1,17 @@
+@startuml
+package "Modelo de Dominio - Check-out" {
+  class Reserva {
+    + finalizar()
+  }
+  class Habitacion {
+    - estado: String
+    + dispararLimpieza()
+  }
+  class CronometroLimpieza {
+    - tiempoX: int
+    + iniciar()
+  }
+  Reserva "1" -- "1" Habitacion
+  Habitacion "1" -- "1" CronometroLimpieza
+}
+@enduml

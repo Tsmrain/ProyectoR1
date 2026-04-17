@@ -1,0 +1,10 @@
+@startuml
+object "<u>:Recepcionista</u>" as r
+object "<u>:SistemaRecepcion</u>" as sys
+object "<u>:Reserva</u>" as res
+object "<u>:Habitacion</u>" as hab
+
+r - sys : 1: validarReserva() >
+sys - res : 2: checkEstado() >
+sys - hab : 3: marcarOcupada() >
+@enduml

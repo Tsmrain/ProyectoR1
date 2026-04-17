@@ -1,0 +1,10 @@
+@startuml
+object "<u>:Cliente</u>" as c
+object "<u>:PortalWeb</u>" as ui
+object "<u>:ControladorBusqueda</u>" as ctrl
+object "<u>:Sistema</u>" as sys
+
+c - ui : 1: buscar() >
+ui - ctrl : 2: solicitar() >
+ctrl - sys : 3: obtenerDatosTiempoReal() >
+@enduml

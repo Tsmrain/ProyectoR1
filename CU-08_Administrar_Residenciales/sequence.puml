@@ -1,0 +1,19 @@
+@startuml
+actor Administrador
+participant "SistemaAdmin" as Sys
+participant "Residencial" as Res
+participant "BaseDeDatos" as DB
+
+Administrador -> Sys : editarResidencial(resId)
+Sys -> Res : cargarDatos()
+Res --> Sys : datosActuales
+Administrador -> Sys : modificarParametros(tiempoX, tarifas, etc)
+Sys -> Res : validarCambios(nuevosDatos)
+alt validacionExitosa == true
+    Sys -> Res : actualizarConfiguracion(nuevosDatos)
+    Sys -> DB : persistir(Res)
+    Sys --> Administrador : cambiosGuardados
+else error
+    Sys --> Administrador : mostrarErrorValidacion()
+end
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+actor Recepcionista
+participant "Sistema" as Sys
+participant "Reserva" as Res
+participant "Habitacion" as Hab
+participant "Cronometro" as Crono
+
+Recepcionista -> Sys : registrarSalida(idHab)
+Sys -> Res : finalizar()
+Res -> Res : setEstado("Finalizada")
+Sys -> Hab : setEstado("Limpieza")
+Sys -> Crono : iniciar(tiempoX)
+Crono -> Crono : comenzarCuentaRegresiva()
+Sys --> Recepcionista : checkOutExitoso
+@enduml

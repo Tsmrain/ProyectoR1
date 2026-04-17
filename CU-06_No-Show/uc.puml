@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+actor "Sistema (Daemon)" as S
+rectangle "Sistema de Reservas" {
+  usecase "CU-06: Gestionar No-Show" as CU06
+}
+S --> CU06
+@enduml

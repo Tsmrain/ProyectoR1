@@ -1,0 +1,17 @@
+@startuml
+package "Modelo de Dominio - No-Show" {
+  class SistemaAutomatico {
+    + monitorearExpiracion()
+  }
+  class Reserva {
+    - id: String
+    - estado: String
+    + cancelarPorIncumplimiento()
+  }
+  class ColaDeEspera {
+    + convertirSiguienteEnConfirmada()
+  }
+  SistemaAutomatico ..> Reserva : observa
+  Reserva "many" -- "1" ColaDeEspera
+}
+@enduml

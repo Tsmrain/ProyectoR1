@@ -1,0 +1,20 @@
+@startuml
+package "Modelo de Dominio - Check-in" {
+  class Recepcionista {
+    - carnetAcceso: String
+  }
+  class Reserva {
+    - id: String
+    - estado: String = "Confirmada"
+    - tiempoLimite: DateTime
+    + esValida(): boolean
+  }
+  class Habitacion {
+    - id: String
+    - estado: String
+  }
+  
+  Recepcionista -- Reserva : gestiona
+  Reserva "1" -- "1" Habitacion
+}
+@enduml
