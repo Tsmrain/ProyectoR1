@@ -6,6 +6,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 import java.time.LocalDateTime;
 
 @RestController
@@ -22,10 +24,11 @@ public class ReservaController {
     @PostMapping
     public ResponseEntity<Reserva> crearReserva(
             @RequestParam Long habitacionId,
-            @RequestParam String nombreCliente,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime horaInicio) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime horaInicio,
+            Principal principal) {
         
-        Reserva nuevaReserva = reservaService.crearReserva(habitacionId, nombreCliente, horaInicio);
+        String emailCliente = principal.getName();
+        Reserva nuevaReserva = reservaService.crearReserva(habitacionId, emailCliente, horaInicio);
         return ResponseEntity.ok(nuevaReserva);
     }
 

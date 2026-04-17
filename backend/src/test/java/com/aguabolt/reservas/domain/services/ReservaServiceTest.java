@@ -4,8 +4,10 @@ import com.aguabolt.reservas.domain.models.EstadoHabitacion;
 import com.aguabolt.reservas.domain.models.EstadoReserva;
 import com.aguabolt.reservas.domain.models.Habitacion;
 import com.aguabolt.reservas.domain.models.Reserva;
+import com.aguabolt.reservas.domain.models.Usuario;
 import com.aguabolt.reservas.infrastructure.repositories.HabitacionRepository;
 import com.aguabolt.reservas.infrastructure.repositories.ReservaRepository;
+import com.aguabolt.reservas.infrastructure.repositories.UsuarioRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -29,18 +31,23 @@ class ReservaServiceTest {
     @Mock
     private ReservaRepository reservaRepository;
 
+    @Mock
+    private UsuarioRepository usuarioRepository;
+
     @InjectMocks
     private ReservaService reservaService;
 
     @Test
     void testCrearReserva_HabitacionDisponible() {
         Habitacion h = Habitacion.builder().id(1L).numero("101").estado(EstadoHabitacion.DISPONIBLE).build();
+        Usuario u = Usuario.builder().email("test@test.com").build();
         LocalDateTime inicio = LocalDateTime.now();
         
         when(habitacionRepository.findById(1L)).thenReturn(Optional.of(h));
+        when(usuarioRepository.findByEmail("test@test.com")).thenReturn(Optional.of(u));
         when(reservaRepository.save(any(Reserva.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        Reserva res = reservaService.crearReserva(1L, "Juan", inicio);
+        Reserva res = reservaService.crearReserva(1L, "test@test.com", inicio);
 
         assertThat(res.getEstado()).isEqualTo(EstadoReserva.CONFIRMADA);
         assertThat(res.getTiempoLimiteCheckIn()).isEqualTo(inicio.plusMinutes(30));
@@ -49,11 +56,13 @@ class ReservaServiceTest {
     @Test
     void testCrearReserva_HabitacionOcupada() {
         Habitacion h = Habitacion.builder().id(1L).numero("101").estado(EstadoHabitacion.OCUPADA).build();
+        Usuario u = Usuario.builder().email("test@test.com").build();
         
         when(habitacionRepository.findById(1L)).thenReturn(Optional.of(h));
+        when(usuarioRepository.findByEmail("test@test.com")).thenReturn(Optional.of(u));
         when(reservaRepository.save(any(Reserva.class))).thenAnswer(i -> i.getArguments()[0]);
 
-        Reserva res = reservaService.crearReserva(1L, "Pedro", LocalDateTime.now());
+        Reserva res = reservaService.crearReserva(1L, "test@test.com", LocalDateTime.now());
 
         assertThat(res.getEstado()).isEqualTo(EstadoReserva.EN_ESPERA);
         assertThat(res.getTiempoLimiteCheckIn()).isNull();

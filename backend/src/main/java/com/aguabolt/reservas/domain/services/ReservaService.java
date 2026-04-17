@@ -4,8 +4,10 @@ import com.aguabolt.reservas.domain.models.EstadoHabitacion;
 import com.aguabolt.reservas.domain.models.EstadoReserva;
 import com.aguabolt.reservas.domain.models.Habitacion;
 import com.aguabolt.reservas.domain.models.Reserva;
+import com.aguabolt.reservas.domain.models.Usuario;
 import com.aguabolt.reservas.infrastructure.repositories.HabitacionRepository;
 import com.aguabolt.reservas.infrastructure.repositories.ReservaRepository;
+import com.aguabolt.reservas.infrastructure.repositories.UsuarioRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,21 +20,29 @@ public class ReservaService {
 
     private final HabitacionRepository habitacionRepository;
     private final ReservaRepository reservaRepository;
+    private final UsuarioRepository usuarioRepository;
 
-    public ReservaService(HabitacionRepository habitacionRepository, ReservaRepository reservaRepository) {
+    public ReservaService(HabitacionRepository habitacionRepository, 
+                          ReservaRepository reservaRepository,
+                          UsuarioRepository usuarioRepository) {
         this.habitacionRepository = habitacionRepository;
         this.reservaRepository = reservaRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     @Transactional
-    public Reserva crearReserva(Long habitacionId, String nombreCliente, LocalDateTime horaInicio) {
+    public Reserva crearReserva(Long habitacionId, String emailCliente, LocalDateTime horaInicio) {
         // Precondición: Existe la habitación
         Habitacion habitacion = habitacionRepository.findById(habitacionId)
                 .orElseThrow(() -> new IllegalArgumentException("Habitación no encontrada"));
 
+        // Precondición: Existe el usuario
+        Usuario cliente = usuarioRepository.findByEmail(emailCliente)
+                .orElseThrow(() -> new IllegalArgumentException("Cliente no encontrado con email: " + emailCliente));
+
         // Creación de la instancia
         Reserva reserva = Reserva.builder()
-                .nombreCliente(nombreCliente)
+                .cliente(cliente)
                 .horaInicio(horaInicio)
                 .habitacion(habitacion)
                 .build();

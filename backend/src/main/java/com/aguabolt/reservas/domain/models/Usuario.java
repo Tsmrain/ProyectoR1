@@ -27,4 +27,8 @@ public class Usuario {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Rol rol;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "residencial_id")
+    private Residencial residencial;
 }

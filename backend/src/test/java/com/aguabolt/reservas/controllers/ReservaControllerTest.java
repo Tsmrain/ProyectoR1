@@ -1,6 +1,7 @@
 package com.aguabolt.reservas.controllers;
 
 import com.aguabolt.reservas.domain.models.Reserva;
+import com.aguabolt.reservas.domain.models.Usuario;
 import com.aguabolt.reservas.domain.services.ReservaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +19,12 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import org.springframework.security.test.context.support.WithMockUser;
 
 @WebMvcTest(ReservaController.class)
-@AutoConfigureMockMvc(addFilters = false)
+@AutoConfigureMockMvc
 class ReservaControllerTest {
 
     @Autowired
@@ -35,21 +37,22 @@ class ReservaControllerTest {
     private com.aguabolt.reservas.infrastructure.security.JwtTokenProvider jwtTokenProvider;
 
     @Test
-    @WithMockUser(roles = "ADMIN")
+    @WithMockUser(username = "carlos@test.com", roles = "CLIENTE")
     void testCrearReservaEndpoint() throws Exception {
+        Usuario cliente = Usuario.builder().email("carlos@test.com").build();
         Reserva mockReserva = Reserva.builder()
                 .id(1L)
-                .nombreCliente("Carlos Cliente")
+                .cliente(cliente)
                 .build();
 
         when(reservaService.crearReserva(anyLong(), anyString(), any(LocalDateTime.class)))
                 .thenReturn(mockReserva);
 
         mockMvc.perform(post("/api/reservas")
+                .with(csrf())
                 .param("habitacionId", "1")
-                .param("nombreCliente", "Carlos Cliente")
                 .param("horaInicio", "2026-04-17T12:00:00"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nombreCliente").value("Carlos Cliente"));
+                .andExpect(jsonPath("$.cliente.email").value("carlos@test.com"));
     }
 }

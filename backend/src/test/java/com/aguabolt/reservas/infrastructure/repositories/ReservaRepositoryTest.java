@@ -4,6 +4,8 @@ import com.aguabolt.reservas.domain.models.EstadoHabitacion;
 import com.aguabolt.reservas.domain.models.EstadoReserva;
 import com.aguabolt.reservas.domain.models.Habitacion;
 import com.aguabolt.reservas.domain.models.Reserva;
+import com.aguabolt.reservas.domain.models.Rol;
+import com.aguabolt.reservas.domain.models.Usuario;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,6 +25,9 @@ class ReservaRepositoryTest {
     @Autowired
     private HabitacionRepository habitacionRepository;
 
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
     @Test
     void testFindFirstByHabitacionIdAndEstadoOrderByCreatedAtAsc() {
         Habitacion h = habitacionRepository.save(Habitacion.builder()
@@ -32,8 +37,11 @@ class ReservaRepositoryTest {
                 .tiempoXLimpieza(30)
                 .build());
         
+        Usuario u1 = usuarioRepository.save(Usuario.builder().email("u1@test.com").password("123").rol(Rol.CLIENTE).build());
+        Usuario u2 = usuarioRepository.save(Usuario.builder().email("u2@test.com").password("123").rol(Rol.CLIENTE).build());
+
         reservaRepository.save(Reserva.builder()
-                .nombreCliente("Antiguo")
+                .cliente(u1)
                 .estado(EstadoReserva.EN_ESPERA)
                 .habitacion(h)
                 .horaInicio(LocalDateTime.now())
@@ -43,7 +51,7 @@ class ReservaRepositoryTest {
         // pero save secuencial debería asignar IDs/fechas incrementales.
         
         reservaRepository.save(Reserva.builder()
-                .nombreCliente("Nuevo")
+                .cliente(u2)
                 .estado(EstadoReserva.EN_ESPERA)
                 .habitacion(h)
                 .horaInicio(LocalDateTime.now())
@@ -52,7 +60,7 @@ class ReservaRepositoryTest {
         Optional<Reserva> result = reservaRepository.findFirstByHabitacionIdAndEstadoOrderByCreatedAtAsc(h.getId(), EstadoReserva.EN_ESPERA);
         
         assertThat(result).isPresent();
-        assertThat(result.get().getNombreCliente()).isEqualTo("Antiguo");
+        assertThat(result.get().getCliente().getEmail()).isEqualTo("u1@test.com");
     }
 
     @Test
@@ -65,9 +73,12 @@ class ReservaRepositoryTest {
                 .build());
         LocalDateTime ahora = LocalDateTime.now();
 
+        Usuario u3 = usuarioRepository.save(Usuario.builder().email("u3@test.com").password("123").rol(Rol.CLIENTE).build());
+        Usuario u4 = usuarioRepository.save(Usuario.builder().email("u4@test.com").password("123").rol(Rol.CLIENTE).build());
+
         // Reserva vencida (hace 1 hora)
         reservaRepository.save(Reserva.builder()
-                .nombreCliente("Vencido")
+                .cliente(u3)
                 .estado(EstadoReserva.CONFIRMADA)
                 .tiempoLimiteCheckIn(ahora.minusHours(1))
                 .horaInicio(ahora.minusHours(2))
@@ -76,7 +87,7 @@ class ReservaRepositoryTest {
 
         // Reserva vigente (en 1 hora)
         reservaRepository.save(Reserva.builder()
-                .nombreCliente("Vigente")
+                .cliente(u4)
                 .estado(EstadoReserva.CONFIRMADA)
                 .tiempoLimiteCheckIn(ahora.plusHours(1))
                 .horaInicio(ahora)
@@ -86,6 +97,6 @@ class ReservaRepositoryTest {
         List<Reserva> result = reservaRepository.findByEstadoAndTiempoLimiteCheckInBefore(EstadoReserva.CONFIRMADA, ahora);
 
         assertThat(result).hasSize(1);
-        assertThat(result.get(0).getNombreCliente()).isEqualTo("Vencido");
+        assertThat(result.get(0).getCliente().getEmail()).isEqualTo("u3@test.com");
     }
 }

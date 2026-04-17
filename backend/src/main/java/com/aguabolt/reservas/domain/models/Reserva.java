@@ -18,8 +18,9 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String nombreCliente;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = false)
+    private Usuario cliente;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
